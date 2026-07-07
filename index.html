@@ -1242,7 +1242,7 @@
   }
 
   async function trackViaAviationStack(key, flightNum) {
-    const url = "http://api.aviationstack.com/v1/flights?access_key=" + encodeURIComponent(key) +
+    const url = "https://api.aviationstack.com/v1/flights?access_key=" + encodeURIComponent(key) +
       "&flight_iata=" + encodeURIComponent(flightNum);
     const res = await fetch(url);
     const data = await res.json();
@@ -1362,7 +1362,7 @@
     refreshBtn.disabled = true;
 
     try {
-      const url = "http://api.aviationstack.com/v1/flights?access_key=" + encodeURIComponent(key) +
+      const url = "https://api.aviationstack.com/v1/flights?access_key=" + encodeURIComponent(key) +
         "&flight_status=active&limit=100";
       const res = await fetch(url);
       const data = await res.json();
