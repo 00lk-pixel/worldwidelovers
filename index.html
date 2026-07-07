@@ -21,6 +21,20 @@
     padding: 16px;
   }
 
+  /* ---- 모바일: 화면 축소(scale) 대신 세로 1단 스택 + 자연 스크롤 ---- */
+  @media (max-width: 700px) {
+    html, body {
+      height: auto;
+      min-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    body {
+      display: block;
+      padding: 14px 12px 32px;
+    }
+  }
+
   #bgCanvas {
     position: fixed;
     inset: 0;
@@ -118,6 +132,12 @@
     gap: 12px;
   }
   .span2 { grid-column: 1 / -1; }
+
+  @media (max-width: 700px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
   .card {
     display: flex;
     flex-direction: column;
@@ -311,6 +331,26 @@
     padding: 8px 10px;
     margin-top: 10px;
     text-align: center;
+  }
+
+  /* ---- 모바일: HUD를 줄바꿈해서 칩이 잘리지 않게 ---- */
+  @media (max-width: 560px) {
+    .weather-hud {
+      flex-wrap: wrap;
+      row-gap: 10px;
+    }
+    .hud-chips {
+      margin-left: 0;
+      width: 100%;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .card { padding: 14px; }
+    .time-box .time { font-size: 15px; }
+    .hud-temp { font-size: 26px; }
   }
 </style>
 </head>
@@ -1415,8 +1455,14 @@
   document.getElementById("liveListRefresh").addEventListener("click", loadLiveFlights);
 
   // ---- 화면 크기에 맞춰 전체 레이아웃을 축소해 스크롤 없이 한눈에 보이게 함 ----
+  // (모바일 폭에서는 억지로 축소하지 않고, 세로 1단 스택 + 자연 스크롤로 보여줌)
+  const MOBILE_QUERY = window.matchMedia("(max-width: 700px)");
   function fitToScreen() {
     const app = document.getElementById("app");
+    if (MOBILE_QUERY.matches) {
+      app.style.transform = "none";
+      return;
+    }
     app.style.transform = "scale(1)";
     const rect = app.getBoundingClientRect();
     const scaleX = (window.innerWidth - 20) / rect.width;
@@ -1425,6 +1471,7 @@
     app.style.transform = "scale(" + scale + ")";
   }
   window.addEventListener("resize", fitToScreen);
+  MOBILE_QUERY.addEventListener("change", fitToScreen);
   fitToScreen();
 </script>
 </body>
